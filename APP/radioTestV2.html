@@ -91,6 +91,26 @@
         .score-display { font-size: 3.5rem; font-weight: 800; color: #0f3460; }
         .pass-badge { font-size: 1.5rem; font-weight: 700; padding: 10px 30px; border-radius: 50px; }
 
+        /* Explanation */
+        .explain-box {
+            background: #fffbea;
+            border-left: 5px solid #f0ad00;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-top: 14px;
+            font-size: 0.97rem;
+            line-height: 1.75;
+            color: #3a3000;
+        }
+        .explain-box .explain-title {
+            font-weight: 700;
+            color: #7a5900;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .hidden { display: none !important; }
         .text-hell { color: #7b1b1b; }
         .text-hard { color: #e67e22; }
@@ -117,6 +137,11 @@
                 <label class="form-label fw-bold mb-2">📊 權重檔案 (選擇性，.csv)</label>
                 <input type="file" id="file-w" accept=".csv" class="form-control">
                 <div class="form-text">例：weight_無線電通訊方法題庫.csv　（省略則以全新等權重開始）</div>
+            </div>
+            <div class="upload-zone mb-4">
+                <label class="form-label fw-bold mb-2">💡 解題說明檔 (選擇性，.md)</label>
+                <input type="file" id="file-e" accept=".md" class="form-control">
+                <div class="form-text">例：Ans_射頻干擾預防與排除技術問題解析18題.md　（省略則答題後不顯示解說）</div>
             </div>
             <div class="mb-4">
                 <label class="form-label fw-bold">📝 每回合題數</label>
@@ -195,6 +220,10 @@
             <div id="question-text" class="question-box"></div>
             <div id="options-area"></div>
             <div id="quiz-feedback" class="alert hidden mt-3"></div>
+            <div id="quiz-explain" class="explain-box hidden">
+                <div class="explain-title">💡 相關技術解說</div>
+                <div id="quiz-explain-text"></div>
+            </div>
             <div id="anki-area" class="anki-area hidden">
                 <p class="text-center text-muted mb-2 fw-bold">請標記此題難易度：</p>
                 <div class="row g-2">
@@ -256,6 +285,7 @@
 // ─── 全域狀態 ───────────────────────────────────────────────
 let questions = [];       // [{ans, text, opts:[4], id}]
 let weights = [];         // 每題當前權重，Easy=0
+let explanations = [];    // 每題解說文字（對應 questions 索引，無解說為 null）
 let sessionQueue = [];    // 本回合題目索引陣列
 let curIdx = 0;           // sessionQueue 中的指標
 let correctCount = 0;
@@ -335,10 +365,43 @@ async function handleLoad() {
             }
         }
 
+        // 解題說明檔（選擇性）
+        explanations = new Array(questions.length).fill(null);
+        const eFile = document.getElementById('file-e').files[0];
+        if (eFile) {
+            const eText = await eFile.text();
+            parseExplainMD(eText);
+        }
+
         renderInfoPage(wStatus, wWarn, null);
         showStep('step-info');
     } catch (e) {
         alert('檔案讀取或解析失敗，請檢查檔案內容。\n' + e.message);
+    }
+}
+
+// ─── 解說 MD 解析 ──────────────────────────────────────────
+// 格式：* **題目 N**：... * **相關技術解說**：...（下一個 * **題目 N+1** 前結束）
+function parseExplainMD(text) {
+    // Split on question boundaries: "題目 N" (N is a number)
+    const blocks = text.split(/\*\s*\*\*題目\s+(\d+)\*\*[：:]/);
+    // blocks: [preamble, "1", content1, "2", content2, ...]
+    for (let i = 1; i < blocks.length; i += 2) {
+        const qNum = parseInt(blocks[i]);        // 1-based question number
+        const content = blocks[i + 1] || '';
+        // Extract text after 相關技術解說：
+        const match = content.match(/\*\s*\*\*相關技術解說\*\*[：:]\s*([\s\S]*?)(?=\*\s*\*\*題目|\*\*提示|$)/);
+        if (match) {
+            const explain = match[1].trim()
+                .replace(/\[\d+\]/g, '')          // remove footnote markers like [1]
+                .replace(/^\*\s+/gm, '')           // strip leading "* " on bullet lines
+                .trim();
+            // Map 1-based question number to 0-based index
+            const idx = qNum - 1;
+            if (idx >= 0 && idx < explanations.length) {
+                explanations[idx] = explain;
+            }
+        }
     }
 }
 
@@ -465,6 +528,7 @@ function renderQuestion() {
     });
 
     document.getElementById('quiz-feedback').classList.add('hidden');
+    document.getElementById('quiz-explain').classList.add('hidden');
     document.getElementById('anki-area').classList.add('hidden');
 }
 
@@ -496,6 +560,17 @@ function checkAnswer(chosen) {
         ? `✅ <strong>答對了！</strong>　正確答案為選項 (${q.ans})`
         : `❌ <strong>答錯了！</strong>　正確答案為選項 (${q.ans})`;
     fb.classList.remove('hidden');
+
+    // 顯示解說（若有載入）
+    const qIdx = sessionQueue[curIdx];
+    const explainEl = document.getElementById('quiz-explain');
+    const explainText = explanations[qIdx];
+    if (explainText) {
+        document.getElementById('quiz-explain-text').textContent = explainText;
+        explainEl.classList.remove('hidden');
+    } else {
+        explainEl.classList.add('hidden');
+    }
 
     document.getElementById('anki-area').classList.remove('hidden');
 }
