@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>台灣業餘無線電資格測試系統</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="config.js"></script>
     <style>
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
@@ -124,50 +125,50 @@
     <!-- ═══════ 首頁 ═══════ -->
     <div id="step-home">
         <div class="card-header-bar">
-            <h2>台灣業餘無線電資格測試系統</h2>
-            <div style="font-size:0.85rem;opacity:0.8;margin-top:4px;">ANKI 權重學習法</div>
+            <h2 data-i18n="app.title">台灣業餘無線電資格測試系統</h2>
+            <div style="font-size:0.85rem;opacity:0.8;margin-top:4px;" data-i18n="app.subtitle">ANKI 權重學習法</div>
         </div>
         <div class="card-body-wrap">
             <div class="upload-zone mb-4">
-                <label class="form-label fw-bold mb-2">📂 題庫檔案 (必要，.csv)</label>
+                <label class="form-label fw-bold mb-2" data-i18n="home.questionFileLabel">📂 題庫檔案 (必要，.csv)</label>
                 <input type="file" id="file-q" accept=".csv" class="form-control">
-                <div class="form-text">例：無線電通訊方法題庫.csv</div>
+                <div class="form-text" data-i18n="home.questionFileHint">例：無線電通訊方法題庫.csv</div>
             </div>
             <div class="upload-zone mb-4">
-                <label class="form-label fw-bold mb-2">📊 權重檔案 (選擇性，.csv)</label>
+                <label class="form-label fw-bold mb-2" data-i18n="home.weightFileLabel">📊 權重檔案 (選擇性，.csv)</label>
                 <input type="file" id="file-w" accept=".csv" class="form-control">
-                <div class="form-text">例：weight_無線電通訊方法題庫.csv　（省略則以全新等權重開始）</div>
+                <div class="form-text" data-i18n="home.weightFileHint">例：weight_無線電通訊方法題庫.csv　（省略則以全新等權重開始）</div>
             </div>
             <div class="upload-zone mb-4">
-                <label class="form-label fw-bold mb-2">💡 解題說明檔 (選擇性，.md)</label>
+                <label class="form-label fw-bold mb-2" data-i18n="home.explainFileLabel">💡 解題說明檔 (選擇性，.md)</label>
                 <input type="file" id="file-e" accept=".md" class="form-control">
-                <div class="form-text">例：Ans_射頻干擾預防與排除技術問題解析18題.md　（省略則答題後不顯示解說）</div>
+                <div class="form-text" data-i18n="home.explainFileHint">例：Ans_射頻干擾預防與排除技術問題解析18題.md　（省略則答題後不顯示解說）</div>
             </div>
             <div class="mb-4">
-                <label class="form-label fw-bold">📝 每回合題數</label>
+                <label class="form-label fw-bold" data-i18n="home.roundSizeLabel">📝 每回合題數</label>
                 <div class="d-flex gap-3">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="roundSize" id="r35" value="35" checked>
-                        <label class="form-check-label" for="r35">35 題（通過需 25 題）</label>
+                        <label class="form-check-label" for="r35" data-i18n="home.round35Label">35 題（通過需 25 題）</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="roundSize" id="r40" value="40">
-                        <label class="form-check-label" for="r40">40 題（通過需 32 題）</label>
+                        <label class="form-check-label" for="r40" data-i18n="home.round40Label">40 題（通過需 32 題）</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="roundSize" id="r50" value="50">
-                        <label class="form-check-label" for="r50">50 題（通過需 40 題）</label>
+                        <label class="form-check-label" for="r50" data-i18n="home.round50Label">50 題（通過需 40 題）</label>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary btn-lg w-100 py-3" onclick="handleLoad()">載入檔案</button>
+            <button class="btn btn-primary btn-lg w-100 py-3" onclick="handleLoad()" data-i18n="home.loadButton">載入檔案</button>
         </div>
     </div>
 
     <!-- ═══════ 資訊頁 ═══════ -->
     <div id="step-info" class="hidden">
         <div class="card-header-bar">
-            <h2>測驗資訊確認</h2>
+            <h2 data-i18n="info.pageTitle">測驗資訊確認</h2>
         </div>
         <div class="card-body-wrap">
             <div id="info-path-msg" class="alert hidden mb-3"></div>
@@ -176,37 +177,37 @@
             <table class="table info-table mb-4">
                 <tbody>
                     <tr>
-                        <td>題庫總題數</td>
-                        <td><span id="info-pool-num" class="text-primary fw-bold">0</span> 題</td>
+                        <td data-i18n="info.poolNumLabel">題庫總題數</td>
+                        <td><span id="info-pool-num" class="text-primary fw-bold">0</span> <span data-i18n="info.unitQuestion">題</span></td>
                     </tr>
                     <tr>
-                        <td>權重狀態</td>
+                        <td data-i18n="info.weightStatusLabel">權重狀態</td>
                         <td><span id="info-w-status">—</span></td>
                     </tr>
                     <tr>
-                        <td>解說檔狀態</td>
-                        <td><span id="info-e-status">未載入</span></td>
+                        <td data-i18n="info.explainStatusLabel">解說檔狀態</td>
+                        <td><span id="info-e-status" data-i18n-init="messages.explainNotLoaded">未載入</span></td>
                     </tr>
                     <tr>
-                        <td>已熟練（Easy，下回不出）</td>
-                        <td><span id="info-learned" class="text-success fw-bold">0</span> 題</td>
+                        <td data-i18n="info.learnedLabel">已熟練（Easy，下回不出）</td>
+                        <td><span id="info-learned" class="text-success fw-bold">0</span> <span data-i18n="info.unitQuestion">題</span></td>
                     </tr>
                     <tr>
-                        <td>待學習（尚未標 Easy）</td>
-                        <td><span id="info-unlearned" class="text-danger fw-bold">0</span> 題</td>
+                        <td data-i18n="info.unlearnedLabel">待學習（尚未標 Easy）</td>
+                        <td><span id="info-unlearned" class="text-danger fw-bold">0</span> <span data-i18n="info.unitQuestion">題</span></td>
                     </tr>
                     <tr>
-                        <td>本回合出題數</td>
-                        <td><span id="info-test-num" class="text-primary fw-bold fs-5">0</span> 題</td>
+                        <td data-i18n="info.testNumLabel">本回合出題數</td>
+                        <td><span id="info-test-num" class="text-primary fw-bold fs-5">0</span> <span data-i18n="info.unitQuestion">題</span></td>
                     </tr>
                     <tr>
-                        <td>通過標準</td>
+                        <td data-i18n="info.passLineLabel">通過標準</td>
                         <td><span id="info-pass-line" class="fw-bold">—</span></td>
                     </tr>
                 </tbody>
             </table>
-            <button id="btn-start-quiz" class="btn btn-success btn-lg w-100 py-3 fs-5" onclick="startQuiz()">開始測驗</button>
-            <button class="btn btn-link w-100 mt-2 text-secondary" onclick="showStep('step-home')">重新上傳檔案</button>
+            <button id="btn-start-quiz" class="btn btn-success btn-lg w-100 py-3 fs-5" onclick="startQuiz()" data-i18n="info.startButton">開始測驗</button>
+            <button class="btn btn-link w-100 mt-2 text-secondary" onclick="showStep('step-home')" data-i18n="info.backButton">重新上傳檔案</button>
         </div>
     </div>
 
@@ -226,30 +227,34 @@
             <div id="options-area"></div>
             <div id="quiz-feedback" class="alert hidden mt-3"></div>
             <div id="quiz-explain" class="explain-box hidden">
-                <div class="explain-title">💡 相關技術解說</div>
+                <div class="explain-title" data-i18n="quiz.explainTitle">💡 相關技術解說</div>
                 <div id="quiz-explain-text"></div>
             </div>
             <div id="anki-area" class="anki-area hidden">
-                <p class="text-center text-muted mb-2 fw-bold">請標記此題難易度：</p>
+                <p class="text-center text-muted mb-2 fw-bold" data-i18n="quiz.ankiLabel">請標記此題難易度：</p>
                 <div class="row g-2">
                     <div class="col-3">
                         <button class="btn btn-hell w-100 py-3 fw-bold rounded-3" onclick="markAnki('HELL')">
-                            HELL<br><small style="font-size:0.75rem;opacity:0.85">非常困難</small>
+                            <span data-i18n="quiz.hell.label">HELL</span><br>
+                            <small style="font-size:0.75rem;opacity:0.85" data-i18n="quiz.hell.desc">非常困難</small>
                         </button>
                     </div>
                     <div class="col-3">
                         <button class="btn btn-hard w-100 py-3 fw-bold rounded-3" onclick="markAnki('HARD')">
-                            HARD<br><small style="font-size:0.75rem;opacity:0.85">困難</small>
+                            <span data-i18n="quiz.hard.label">HARD</span><br>
+                            <small style="font-size:0.75rem;opacity:0.85" data-i18n="quiz.hard.desc">困難</small>
                         </button>
                     </div>
                     <div class="col-3">
                         <button class="btn btn-good w-100 py-3 fw-bold rounded-3" onclick="markAnki('GOOD')">
-                            GOOD<br><small style="font-size:0.75rem;opacity:0.85">普通</small>
+                            <span data-i18n="quiz.good.label">GOOD</span><br>
+                            <small style="font-size:0.75rem;opacity:0.85" data-i18n="quiz.good.desc">普通</small>
                         </button>
                     </div>
                     <div class="col-3">
                         <button class="btn btn-easy w-100 py-3 fw-bold rounded-3" onclick="markAnki('EASY')">
-                            EASY<br><small style="font-size:0.75rem;opacity:0.85">已熟練</small>
+                            <span data-i18n="quiz.easy.label">EASY</span><br>
+                            <small style="font-size:0.75rem;opacity:0.85" data-i18n="quiz.easy.desc">已熟練</small>
                         </button>
                     </div>
                 </div>
@@ -260,7 +265,7 @@
     <!-- ═══════ 結果頁 ═══════ -->
     <div id="step-result" class="hidden">
         <div class="card-header-bar">
-            <h2>測驗結果</h2>
+            <h2 data-i18n="result.pageTitle">測驗結果</h2>
         </div>
         <div class="card-body-wrap text-center">
             <div class="score-display mb-2" id="res-score">0 / 0</div>
@@ -272,12 +277,14 @@
             <div class="row g-3 justify-content-center">
                 <div class="col-md-5">
                     <button class="btn btn-primary btn-lg w-100 py-3" onclick="doAction('RESTART')">
-                        儲存進度並繼續<br><small>（儲存權重 → 資訊頁）</small>
+                        <span data-i18n="result.saveButton">儲存進度並繼續</span><br>
+                        <small data-i18n="result.saveButtonSub">（儲存權重 → 資訊頁）</small>
                     </button>
                 </div>
                 <div class="col-md-5">
                     <button class="btn btn-outline-danger btn-lg w-100 py-3" onclick="doAction('RESET')">
-                        清空進度重練<br><small>（重置所有權重 → 資訊頁）</small>
+                        <span data-i18n="result.resetButton">清空進度重練</span><br>
+                        <small data-i18n="result.resetButtonSub">（重置所有權重 → 資訊頁）</small>
                     </button>
                 </div>
             </div>
@@ -287,12 +294,100 @@
 </div><!-- /main-card -->
 
 <script>
+// ─── 預設文字設定 ──────────────────────────────────────────
+const DEFAULT_CONFIG = {
+    app: {
+        title: "台灣業餘無線電資格測試系統",
+        subtitle: "ANKI 權重學習法"
+    },
+    home: {
+        configFileLabel: "⚙️ 設定檔 (選擇性，.json)",
+        configFileHint: "例：config.json　（省略則使用預設文字）",
+        questionFileLabel: "📂 題庫檔案 (必要，.csv)",
+        questionFileHint: "例：無線電通訊方法題庫.csv",
+        weightFileLabel: "📊 權重檔案 (選擇性，.csv)",
+        weightFileHint: "例：weight_無線電通訊方法題庫.csv　（省略則以全新等權重開始）",
+        explainFileLabel: "💡 解題說明檔 (選擇性，.md)",
+        explainFileHint: "例：Ans_射頻干擾預防與排除技術問題解析18題.md　（省略則答題後不顯示解說）",
+        roundSizeLabel: "📝 每回合題數",
+        round35Label: "35 題（通過需 25 題）",
+        round40Label: "40 題（通過需 32 題）",
+        round50Label: "50 題（通過需 40 題）",
+        loadButton: "載入檔案"
+    },
+    info: {
+        pageTitle: "測驗資訊確認",
+        poolNumLabel: "題庫總題數",
+        unitQuestion: "題",
+        weightStatusLabel: "權重狀態",
+        explainStatusLabel: "解說檔狀態",
+        learnedLabel: "已熟練（Easy，下回不出）",
+        unlearnedLabel: "待學習（尚未標 Easy）",
+        testNumLabel: "本回合出題數",
+        passLineLabel: "通過標準",
+        startButton: "開始測驗",
+        resetStartButton: "重置並開始（已全部熟練）",
+        backButton: "重新上傳檔案"
+    },
+    quiz: {
+        counterTemplate: "第 {pos} / {total} 題",
+        correctTemplate: "答對：{count}",
+        questionPrefix: "第 {pos} 題",
+        explainTitle: "💡 相關技術解說",
+        ankiLabel: "請標記此題難易度：",
+        hell: { label: "HELL", desc: "非常困難" },
+        hard: { label: "HARD", desc: "困難" },
+        good: { label: "GOOD", desc: "普通" },
+        easy: { label: "EASY", desc: "已熟練" }
+    },
+    result: {
+        pageTitle: "測驗結果",
+        pctTemplate: "正確率：{pct}%",
+        passText: "及格 PASS ✓",
+        failText: "不及格 FAIL ✗",
+        saveButton: "儲存進度並繼續",
+        saveButtonSub: "（儲存權重 → 資訊頁）",
+        resetButton: "清空進度重練",
+        resetButtonSub: "（重置所有權重 → 資訊頁）"
+    },
+    messages: {
+        noQuestionFile: "請選取題庫檔案！",
+        configParseError: "設定檔解析失敗，將使用預設設定。\n",
+        parseError: "題庫解析失敗，請確認 CSV 格式。",
+        readError: "檔案讀取或解析失敗，請檢查檔案內容。\n",
+        noQuestions: "無法生成題目，請確認題庫。",
+        weightNew: "全新開始（等權重）",
+        weightLoaded: "已載入歷史權重",
+        weightMismatch: "⚠️ 權重檔題數（{wCount} 題）與題庫題數（{qCount} 題）不符，已忽略權重檔，改以等權重開始。",
+        weightMismatchStatus: "權重檔不符（已忽略）",
+        explainNotLoaded: "未載入",
+        explainParseError: "⚠️ 解說檔無法解析（格式不符或題號未匹配），已忽略解說檔。",
+        explainParseErrorStatus: "解說檔格式錯誤（已忽略）",
+        explainPartial: "已載入部分解說（{matched} / {total} 題）",
+        explainFull: "已載入完整解說（{matched} 題）",
+        allEasyInfo: "所有題目均已標記為 Easy（熟練）！按下按鈕後系統將重置所有權重並立即開始新回合。",
+        allEasyPassLine: "—（所有題目已熟練，按下按鈕後重置並立即開始新回合）",
+        passLinePartial: "{needed} 題（{actual} 題 × 80%，因可出題數不足一回合）",
+        passLineFull: "{needed} 題正確（{roundSize} 題制標準）",
+        confirmReset: "確定要清空所有學習進度，將所有題目重置為等權重嗎？",
+        resetDone: "⚠️ 您選擇了【清空進度重練】，所有題目已重置為等權重。",
+        resetStatus: "重置為等權重",
+        saveDone: "✅ 您選擇了【儲存並繼續】，學習進度已儲存，請開始下一回合。",
+        answerCorrect: "✅ <strong>答對了！</strong>　正確答案為選項 ({ans})",
+        answerWrong: "❌ <strong>答錯了！</strong>　正確答案為選項 ({ans})",
+        resultNotePartial: "本回合實際出題 {actual} 題（可出題數不足 {roundSize} 題），以 80% 為通過標準，需答對 {needed} 題。",
+        resultNoteFull: "本回合 {roundSize} 題制，通過標準為答對 {needed} 題。"
+    }
+};
+
 // ─── 全域狀態 ───────────────────────────────────────────────
+let CFG = DEFAULT_CONFIG;
+
 let questions = [];       // [{ans, text, opts:[4], id}]
 let weights = [];         // 每題當前權重，Easy=0
 let explanations = [];    // 每題解說文字（對應 questions 索引，無解說為 null）
-let explainStatus = '未載入';  // 顯示在資訊頁的解說檔狀態
-let explainWarn = '';          // 解說檔警告訊息（格式錯誤等）
+let explainStatus = '';   // 顯示在資訊頁的解說檔狀態
+let explainWarn = '';     // 解說檔警告訊息（格式錯誤等）
 let sessionQueue = [];    // 本回合題目索引陣列
 let curIdx = 0;           // sessionQueue 中的指標
 let correctCount = 0;
@@ -304,6 +399,36 @@ const WEIGHT_HELL = 4.0;
 const WEIGHT_HARD = 2.0;
 const WEIGHT_GOOD = 0.5;
 const WEIGHT_INIT = 1.0;
+
+// ─── 文字設定工具 ──────────────────────────────────────────
+// 讀取設定值，支援 "section.key" 點記法
+function t(dotKey, params = {}) {
+    const val = dotKey.split('.').reduce((obj, k) => (obj && obj[k] !== undefined) ? obj[k] : undefined, CFG);
+    let str = (val !== undefined && typeof val === 'string') ? val : dotKey;
+    return Object.entries(params).reduce((s, [k, v]) => s.split(`{${k}}`).join(String(v)), str);
+}
+
+// 深層合併兩個物件（source 覆蓋 target）
+function deepMerge(target, source) {
+    const result = Object.assign({}, target);
+    for (const key of Object.keys(source)) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key]) &&
+            target[key] && typeof target[key] === 'object') {
+            result[key] = deepMerge(target[key], source[key]);
+        } else {
+            result[key] = source[key];
+        }
+    }
+    return result;
+}
+
+// 將設定文字套用至帶有 data-i18n 屬性的 DOM 元素
+function applyTexts() {
+    document.title = t('app.title');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.dataset.i18n);
+    });
+}
 
 // ─── CSV 解析 ─────────────────────────────────────────────
 function parseCSV(text) {
@@ -341,18 +466,18 @@ function splitCSVLine(line) {
 // ─── 檔案載入 ─────────────────────────────────────────────
 async function handleLoad() {
     const qFile = document.getElementById('file-q').files[0];
-    if (!qFile) { alert('請選取題庫檔案！'); return; }
+    if (!qFile) { alert(t('messages.noQuestionFile')); return; }
 
     roundSize = parseInt(document.querySelector('input[name="roundSize"]:checked').value);
 
     try {
         questions = parseCSV(await qFile.text());
-        if (questions.length === 0) { alert('題庫解析失敗，請確認 CSV 格式。'); return; }
+        if (questions.length === 0) { alert(t('messages.parseError')); return; }
 
         // 初始化等權重
         weights = new Array(questions.length).fill(WEIGHT_INIT);
 
-        let wStatus = '全新開始（等權重）';
+        let wStatus = t('messages.weightNew');
         let wWarn = '';
 
         const wFile = document.getElementById('file-w').files[0];
@@ -360,41 +485,41 @@ async function handleLoad() {
             const wText = await wFile.text();
             const wLines = wText.trim().split(/\r?\n/).slice(1).filter(l => l.trim());
             if (wLines.length !== questions.length) {
-                wWarn = `⚠️ 權重檔題數（${wLines.length} 題）與題庫題數（${questions.length} 題）不符，已忽略權重檔，改以等權重開始。`;
-                wStatus = '權重檔不符（已忽略）';
+                wWarn = t('messages.weightMismatch', { wCount: wLines.length, qCount: questions.length });
+                wStatus = t('messages.weightMismatchStatus');
             } else {
                 wLines.forEach((line, i) => {
                     const parts = line.split(',');
                     const w = parts.length >= 2 ? parseFloat(parts[1]) : WEIGHT_INIT;
                     weights[i] = isNaN(w) ? WEIGHT_INIT : w;
                 });
-                wStatus = '已載入歷史權重';
+                wStatus = t('messages.weightLoaded');
             }
         }
 
         // 解題說明檔（選擇性）
         explanations = new Array(questions.length).fill(null);
-        explainStatus = '未載入';
+        explainStatus = t('messages.explainNotLoaded');
         explainWarn = '';
         const eFile = document.getElementById('file-e').files[0];
         if (eFile) {
             const eText = await eFile.text();
             const matched = parseExplainMD(eText);
             if (matched === 0) {
-                explainWarn = '⚠️ 解說檔無法解析（格式不符或題號未匹配），已忽略解說檔。';
-                explainStatus = '解說檔格式錯誤（已忽略）';
+                explainWarn = t('messages.explainParseError');
+                explainStatus = t('messages.explainParseErrorStatus');
                 explanations.fill(null);
             } else if (matched < questions.length) {
-                explainStatus = `已載入部分解說（${matched} / ${questions.length} 題）`;
+                explainStatus = t('messages.explainPartial', { matched, total: questions.length });
             } else {
-                explainStatus = `已載入完整解說（${matched} 題）`;
+                explainStatus = t('messages.explainFull', { matched });
             }
         }
 
         renderInfoPage(wStatus, wWarn, null);
         showStep('step-info');
     } catch (e) {
-        alert('檔案讀取或解析失敗，請檢查檔案內容。\n' + e.message);
+        alert(t('messages.readError') + e.message);
     }
 }
 
@@ -445,25 +570,25 @@ function renderInfoPage(wStatus, wWarn, pathMsg) {
     // 通過標準 — three branches
     let passLine;
     if (allEasy) {
-        passLine = '—（所有題目已熟練，按下按鈕後重置並立即開始新回合）';
+        passLine = t('messages.allEasyPassLine');
     } else if (actualRound < roundSize) {
         const needed = Math.ceil(actualRound * 0.8);
-        passLine = `${needed} 題（${actualRound} 題 × 80%，因可出題數不足一回合）`;
+        passLine = t('messages.passLinePartial', { needed, actual: actualRound });
     } else {
         const needed = PASS_MAP[roundSize] || Math.ceil(roundSize * 0.8);
-        passLine = `${needed} 題正確（${roundSize} 題制標準）`;
+        passLine = t('messages.passLineFull', { needed, roundSize });
     }
     document.getElementById('info-pass-line').textContent = passLine;
 
     // 開始按鈕文字
     document.getElementById('btn-start-quiz').textContent =
-        allEasy ? '重置並開始（已全部熟練）' : '開始測驗';
+        allEasy ? t('info.resetStartButton') : t('info.startButton');
 
     // 路徑訊息 / 全部熟練提示
     const pathEl = document.getElementById('info-path-msg');
     if (allEasy && !pathMsg) {
         pathEl.className = 'alert alert-info mb-3';
-        pathEl.textContent = '所有題目均已標記為 Easy（熟練）！按下按鈕後系統將重置所有權重並立即開始新回合。';
+        pathEl.textContent = t('messages.allEasyInfo');
         pathEl.classList.remove('hidden');
     } else if (pathMsg) {
         pathEl.className = `alert ${pathMsg.type} mb-3`;
@@ -517,7 +642,7 @@ function startQuiz() {
         pool[picked] = 0; // 抽過不再重複
     }
 
-    if (sessionQueue.length === 0) { alert('無法生成題目，請確認題庫。'); return; }
+    if (sessionQueue.length === 0) { alert(t('messages.noQuestions')); return; }
     actualRound = sessionQueue.length;
 
     showStep('step-quiz');
@@ -540,12 +665,12 @@ function renderQuestion() {
     const q = questions[sessionQueue[curIdx]];
     const pos = curIdx + 1;
 
-    document.getElementById('quiz-counter').textContent = `第 ${pos} / ${actualRound} 題`;
-    document.getElementById('quiz-correct').textContent = `答對：${correctCount}`;
+    document.getElementById('quiz-counter').textContent = t('quiz.counterTemplate', { pos, total: actualRound });
+    document.getElementById('quiz-correct').textContent = t('quiz.correctTemplate', { count: correctCount });
     document.getElementById('quiz-progress').style.width = `${((pos - 1) / actualRound) * 100}%`;
 
     document.getElementById('question-text').innerHTML =
-        `<strong>第 ${pos} 題</strong>　${escapeHTML(q.text)}`;
+        `<strong>${t('quiz.questionPrefix', { pos })}</strong>　${escapeHTML(q.text)}`;
 
     const optArea = document.getElementById('options-area');
     optArea.innerHTML = '';
@@ -588,8 +713,8 @@ function checkAnswer(chosen) {
     const fb = document.getElementById('quiz-feedback');
     fb.className = `alert mt-3 ${isRight ? 'alert-success' : 'alert-danger'}`;
     fb.innerHTML = isRight
-        ? `✅ <strong>答對了！</strong>　正確答案為選項 (${q.ans})`
-        : `❌ <strong>答錯了！</strong>　正確答案為選項 (${q.ans})`;
+        ? t('messages.answerCorrect', { ans: q.ans })
+        : t('messages.answerWrong', { ans: q.ans });
     fb.classList.remove('hidden');
 
     // 顯示解說（若有載入）
@@ -628,22 +753,22 @@ function showResult() {
 
     const pct = Math.round((correctCount / actualRound) * 100);
     document.getElementById('res-score').textContent = `${correctCount} / ${actualRound}`;
-    document.getElementById('res-pct').textContent = `正確率：${pct}%`;
+    document.getElementById('res-pct').textContent = t('result.pctTemplate', { pct });
 
     let passed;
     let passNote;
     if (actualRound < roundSize) {
         const needed = Math.ceil(actualRound * 0.8);
         passed = correctCount >= needed;
-        passNote = `本回合實際出題 ${actualRound} 題（可出題數不足 ${roundSize} 題），以 80% 為通過標準，需答對 ${needed} 題。`;
+        passNote = t('messages.resultNotePartial', { actual: actualRound, roundSize, needed });
     } else {
         const needed = PASS_MAP[roundSize] || Math.ceil(roundSize * 0.8);
         passed = correctCount >= needed;
-        passNote = `本回合 ${roundSize} 題制，通過標準為答對 ${needed} 題。`;
+        passNote = t('messages.resultNoteFull', { roundSize, needed });
     }
 
     const passEl = document.getElementById('res-pass');
-    passEl.textContent = passed ? '及格 PASS ✓' : '不及格 FAIL ✗';
+    passEl.textContent = passed ? t('result.passText') : t('result.failText');
     passEl.className = `pass-badge ${passed ? 'bg-success text-white' : 'bg-danger text-white'}`;
 
     document.getElementById('res-pass-note').textContent = passNote;
@@ -652,12 +777,12 @@ function showResult() {
 // ─── 結束動作 ─────────────────────────────────────────────
 function doAction(mode) {
     if (mode === 'RESET') {
-        if (!confirm('確定要清空所有學習進度，將所有題目重置為等權重嗎？')) return;
+        if (!confirm(t('messages.confirmReset'))) return;
         weights.fill(WEIGHT_INIT);
-        renderInfoPage('重置為等權重', '', { type: 'alert-warning', text: '⚠️ 您選擇了【清空進度重練】，所有題目已重置為等權重。' });
+        renderInfoPage(t('messages.resetStatus'), '', { type: 'alert-warning', text: t('messages.resetDone') });
     } else {
         exportWeights();
-        renderInfoPage('已載入歷史權重', '', { type: 'alert-success', text: '✅ 您選擇了【儲存並繼續】，學習進度已儲存，請開始下一回合。' });
+        renderInfoPage(t('messages.weightLoaded'), '', { type: 'alert-success', text: t('messages.saveDone') });
     }
     showStep('step-info');
 }
@@ -683,6 +808,12 @@ function showStep(id) {
 function escapeHTML(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ─── 初始化 ───────────────────────────────────────────────
+if (window.APP_CONFIG) {
+    CFG = deepMerge(DEFAULT_CONFIG, window.APP_CONFIG);
+}
+applyTexts();
 </script>
 </body>
 </html>
